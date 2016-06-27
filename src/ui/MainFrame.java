@@ -66,6 +66,11 @@ public class MainFrame extends JFrame {
 	int count = 0;
 	int[] can=new int[10000];
 	JFrame error=new JFrame("error");
+	
+	JMenuItem version1=new JMenuItem("version1");
+	JMenuItem version2=new JMenuItem("version2");
+	JMenuItem version3=new JMenuItem("version3");
+	JMenu version=new JMenu("version");
 	public MainFrame() {
 		// 鍒涘缓绐椾綋
 		error.setLayout(null);
@@ -167,10 +172,20 @@ public class MainFrame extends JFrame {
 		JMenuItem logout=new JMenuItem("logout");
 		JMenuItem register=new JMenuItem("register");
 		
+		
 		JMenu operate=new JMenu("operate");
 		operate.add(undo);
 		operate.add(redo);
 		menuBar.add(operate);
+		
+		version.add(version1);
+		version.add(version2);
+		version.add(version3);
+		menuBar.add(version);
+		version1.addActionListener(new v1());
+		version2.addActionListener(new v2());
+		version3.addActionListener(new v3());
+		
 		log.add(register);
 		log.add(login);
 		log.add(logout);
@@ -282,7 +297,7 @@ public class MainFrame extends JFrame {
 			tip.setText("");
 			try {
 				if(!RemoteHelper.getInstance().getIOService().writeFile("", admin.getText(), filename.getText())){
-				   b.setVisible(false);
+					b.setVisible(false);
 				   frame.setTitle(filename.getText()+":"+frame.getTitle());
 				   count=0;
 				   textarea_order[count]=textArea.getText();
@@ -334,7 +349,7 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			try {
-				textArea.setText(RemoteHelper.getInstance().getIOService().readFile(admin.getText(), choosefile.getText()));
+				textArea.setText(RemoteHelper.getInstance().getIOService().readfileline(1,admin.getText(), choosefile.getText()));
 				openframe.setVisible(false);
 				frame.setTitle(choosefile.getText()+":"+frame.getTitle());
 				filelist.setText("");
@@ -479,11 +494,51 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String code = textArea.getText();
 			try {
-				RemoteHelper.getInstance().getIOService().writeFile(code, admin.getText(), frame.getTitle().split(":")[0]);
+				RemoteHelper.getInstance().getIOService().writefileline(code, admin.getText(), frame.getTitle().split(":")[0]);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 			}
 		}
 
+	}
+	class v1 implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+				textArea.setText(RemoteHelper.getInstance().getIOService().readfileline(1, admin.getText(), frame.getTitle().split(":")[0]));
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	class v2 implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+				textArea.setText(RemoteHelper.getInstance().getIOService().readfileline(2, admin.getText(), frame.getTitle().split(":")[0]));
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+	}
+	class v3 implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+				textArea.setText(RemoteHelper.getInstance().getIOService().readfileline(3, admin.getText(), frame.getTitle().split(":")[0]));
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 	}
 }
